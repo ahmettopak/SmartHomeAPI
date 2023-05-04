@@ -1,7 +1,7 @@
 const lampSchema = require('../models/lampSchema.js')
 const jwt = require('jsonwebtoken')
 
-const create = async (req, res) => {
+const createLamp = async (req, res) => {
     try {
         const { name, status } = req.body
         const element = await lampSchema.findOne({ name })
@@ -23,7 +23,7 @@ const create = async (req, res) => {
     }
 }
 
-let update = async (req, res) => {
+const updateLamp = async (req, res) => {
     try {
         const { name, status } = req.body;
 
@@ -47,7 +47,7 @@ let update = async (req, res) => {
     }
 }
 
-const deleteElement = async (req, res) => {
+const deleteLamp = async (req, res) => {
     try {
         const { name } = req.body;
         const element = await lampSchema.findOne({ name });
@@ -73,5 +73,22 @@ const deleteElement = async (req, res) => {
 
 
 
+const getLamp = async (req, res) => {
+    try {
+        const { name } = req.body;
 
-module.exports = { create, update, deleteElement }
+        const element = await lampSchema.findOne({ name });
+
+        if (!element) {
+            return res.status(500).json({ message: "Böyle bir lamba bulunamadı..." })
+        }
+
+        res.status(200).json(
+            element
+        )
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+module.exports = { createLamp, updateLamp, deleteLamp, getLamp }

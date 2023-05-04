@@ -1,7 +1,8 @@
-let { create, update, deleteElement } = require("../controllers/lampControllers.js")
+let { createLamp, updateLamp, deleteLamp, getLamp } = require("../controllers/lampControllers.js")
 const express = require('express')
 const router = express.Router();
-router.post('/create', create)
-router.post('/update', update)
-router.post('/delete', deleteElement)
+router.post('/lamp/create', createLamp)
+router.post('/lamp/update', updateLamp)
+router.post('/lamp/delete', deleteLamp)
+router.post('/lamp/get', getLamp)
 module.exports = router

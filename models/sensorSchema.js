@@ -9,8 +9,9 @@ const SensorScehema = new mongoose.Schema({
     },
 
     status: {
-        type: Boolean,
+        type: mongoose.Schema.Types.Boolean,
         required: true,
+        default: false,
     },
 
     value: {
