@@ -4,5 +4,5 @@ const router = express.Router();
 router.post('/lamp/create', createLamp)
 router.post('/lamp/update', updateLamp)
 router.post('/lamp/delete', deleteLamp)
-router.post('/lamp/get', getLamp)
+router.get('/lamp/get', getLamp)
 module.exports = router

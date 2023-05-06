@@ -75,9 +75,7 @@ const deleteLamp = async (req, res) => {
 
 const getLamp = async (req, res) => {
     try {
-        const { name } = req.body;
-
-        const element = await lampSchema.findOne({ name });
+        const element = await lampSchema.find().select("name status");
 
         if (!element) {
             return res.status(500).json({ message: "Böyle bir lamba bulunamadı..." })
