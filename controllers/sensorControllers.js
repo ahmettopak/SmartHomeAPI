@@ -1,16 +1,16 @@
-const lampSchema = require('../models/lampSchema.js')
+const sensorScehema = require('../models/sensorSchema.js')
 const jwt = require('jsonwebtoken')
 
-const createLamp = async (req, res) => {
+const createSensor = async (req, res) => {
     try {
-        const { name, status } = req.body
-        const element = await lampSchema.findOne({ name })
+        const { name, value } = req.body
+        const element = await sensorScehema.findOne({ name })
 
         if (element) {
-            return res.status(500).json({ message: "Bu lamba zaten bulunmakta !!" })
+            return res.status(500).json({ message: "Bu Sensor zaten bulunmakta !!" })
         }
 
-        const newElement = await lampSchema.create({ name, status })
+        const newElement = await sensorScehema.create({ name, value })
         const token = await jwt.sign({ id: newElement.id }, process.env.SECRET_TOKEN, { expiresIn: '1h' });
         res.status(200).json({
             status: "OK",
@@ -23,41 +23,37 @@ const createLamp = async (req, res) => {
     }
 }
 
-const updateLamp = async (req, res) => {
+const updateSensor = async (req, res) => {
     try {
-        const { name, status } = req.body;
+        const { name, value } = req.body;
 
-        const element = await lampSchema.findOne({ name });
+        const element = await sensorScehema.findOne({ name });
 
         if (!element) {
-            return res.status(500).json({ message: "Böyle bir lamba bulunamadı..." })
+            return res.status(500).json({ message: "Böyle bir Sensor bulunamadı..." })
         }
         const filter = { name: name };
-        const updateElm = { status: status };
-        const doc = await lampSchema.findOneAndUpdate(filter, updateElm, {
+        const updateElm = { value: value };
+        const doc = await sensorScehema.findOneAndUpdate(filter, updateElm, {
             new: true
         });
 
         const token = jwt.sign({ id: doc.id }, process.env.SECRET_TOKEN, { expiresIn: '1h' })
-        res.status(200).json(
-            //add token
-            // {
-            //     doc,
-            //     token
-            // }
-            doc.status
-        )
+        res.status(200).json({
+            doc,
+            token
+        })
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
 }
 
-const deleteLamp = async (req, res) => {
+const deleteSensor = async (req, res) => {
     try {
         const { name } = req.body;
-        const element = await lampSchema.findOne({ name });
+        const element = await sensorScehema.findOne({ name });
         if (!element) {
-            return res.status(500).json({ message: "Böyle bir lamba bulunamadı..." })
+            return res.status(500).json({ message: "Böyle bir Sensor bulunamadı..." })
         }
         await element.deleteOne({ name })
         const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, { expiresIn: '1h' })
@@ -69,7 +65,7 @@ const deleteLamp = async (req, res) => {
     } catch (error) {
         //return res.status(500).json({ message: error.message })
         const { name } = req.body;
-        const element = await lampSchema.findOne({ name });
+        const element = await sensorScehema.findOne({ name });
         if (!element) {
             return res.status(500).json({ message: "Başarı ile silindi" })
         }
@@ -78,12 +74,12 @@ const deleteLamp = async (req, res) => {
 
 
 
-const getLamp = async (req, res) => {
+const getSensor = async (req, res) => {
     try {
-        const element = await lampSchema.find().select("name status");
+        const element = await sensorScehema.find().select("name value");
 
         if (!element) {
-            return res.status(500).json({ message: "Böyle bir lamba bulunamadı..." })
+            return res.status(500).json({ message: "Böyle bir Sensor bulunamadı..." })
         }
 
         res.status(200).json(
@@ -94,4 +90,4 @@ const getLamp = async (req, res) => {
     }
 }
 
-module.exports = { createLamp, updateLamp, deleteLamp, getLamp }
+module.exports = { createSensor, updateSensor, deleteSensor, getSensor }
